@@ -82,22 +82,24 @@ unsigned _PDCLIB_bigint_div( _PDCLIB_bigint_t * dividend, _PDCLIB_bigint_t const
 
 #include "_PDCLIB_test.h"
 
+static _PDCLIB_bigint_t testdata[] =
+{
+    { 1, { 0x1234 } },
+    { 2, { 0x2345, 0x0001 } },
+    { 1, { 0x4000 } },
+    { 1, { 0x3FFF } },
+    { 1, { 0x0001 } },
+    { 1, { _PDCLIB_BIGINT_DIGIT_MAX } },
+    { 1, { 0xFFF9 } },
+    { 1, { 0x1C71 } }
+};
+
+
 int main( void )
 {
 #ifndef REGTEST
     _PDCLIB_bigint_t dividend;
     _PDCLIB_bigint_t divisor;
-    _PDCLIB_bigint_t testdata[] =
-    {
-        { 1, { 0x1234 } },
-        { 2, { 0x2345, 0x0001 } },
-        { 1, { 0x4000 } },
-        { 1, { 0x3FFF } },
-        { 1, { 0x0001 } },
-        { 1, { _PDCLIB_BIGINT_DIGIT_MAX } },
-        { 1, { 0xFFF9 } },
-        { 1, { 0x1C71 } }
-    };
 
     /* dividend < divisor */
     _PDCLIB_bigint_from_bigint( &dividend, &testdata[0] );

@@ -30,7 +30,9 @@ void * sbrk( intptr_t );
 #define USE_DL_PREFIX 1
 
 /* Thread safety */
-#define USE_LOCKS 1
+#define USE_LOCKS 0
+#define HAVE_MORECORE 0
+#define NO_MALLINFO 1
 
 /* Hide all functions herein as internal to the library */
 #define DLMALLOC_EXPORT _PDCLIB_LOCAL
@@ -4860,7 +4862,7 @@ void* dlcalloc(size_t n_elements, size_t elem_size) {
   void* mem;
   size_t req = 0;
   if (n_elements != 0) {
-    req = n_elements * elem_size;
+    req = (unsigned int)n_elements * (unsigned int)elem_size;
     if (((n_elements | elem_size) & ~(size_t)0xffff) &&
         (req / n_elements != elem_size))
       req = MAX_SIZE_T; /* force downstream failure on overflow */
@@ -5440,7 +5442,7 @@ struct mallinfo dlmallinfo(void) {
 #endif /* NO_MALLINFO */
 
 #if !NO_MALLOC_STATS
-void dlmalloc_stats() {
+void dlmalloc_stats(void) {
   internal_malloc_stats(gm);
 }
 #endif /* NO_MALLOC_STATS */

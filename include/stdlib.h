@@ -28,10 +28,10 @@ typedef _PDCLIB_size_t size_t;
 
 /* TODO: atof(), strtof(), strtod(), strtold() */
 
-_PDCLIB_PUBLIC double atof( const char * nptr );
-_PDCLIB_PUBLIC double strtod( const char * _PDCLIB_restrict nptr, char ** _PDCLIB_restrict endptr );
-_PDCLIB_PUBLIC float strtof( const char * _PDCLIB_restrict nptr, char ** _PDCLIB_restrict endptr );
-_PDCLIB_PUBLIC long double strtold( const char * _PDCLIB_restrict nptr, char ** _PDCLIB_restrict endptr );
+//_PDCLIB_PUBLIC double atof( const char * nptr );
+//_PDCLIB_PUBLIC double strtod( const char * _PDCLIB_restrict nptr, char ** _PDCLIB_restrict endptr );
+//_PDCLIB_PUBLIC float strtof( const char * _PDCLIB_restrict nptr, char ** _PDCLIB_restrict endptr );
+//_PDCLIB_PUBLIC long double strtold( const char * _PDCLIB_restrict nptr, char ** _PDCLIB_restrict endptr );
 
 /* Separate the character array nptr into three parts: A (possibly empty)
    sequence of whitespace characters, a character representation of an integer

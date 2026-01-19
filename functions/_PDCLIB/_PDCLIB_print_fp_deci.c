@@ -12,8 +12,9 @@
 
 static int prep( _PDCLIB_bigint_t * mantissa, int exponent )
 {
-    /* log10(2) to 128bit precision */
-    const long double log_10_2 = 0.30102999566398119521373889472449302l;
+    /* log10(2). 上游用 long double（128bit）以追求精度；BPF 无 long double（long double
+       == double，64bit），故这里直接用 double，精度对 BPF 目标无损失。 */
+    const double log_10_2 = 0.30102999566398119521;
 
     /* Get an approximation of the base 10 exponent we are looking at
        and make it fall one short in most cases as correction is easier

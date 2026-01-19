@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 static int_fast32_t detzcode( const char * codep )
 {
@@ -662,8 +663,10 @@ static int tzloadbody( char const * name, struct state * sp, bool doextend, unio
 */
 int _PDCLIB_tzload( char const * name, struct state * sp, bool doextend )
 {
-    union local_storage ls;
-    return tzloadbody( name, sp, doextend, &ls );
+    union local_storage* ls = malloc(sizeof(union local_storage));
+    int ret =  tzloadbody( name, sp, doextend, ls );
+    free(ls);
+    return ret;
 }
 
 #endif

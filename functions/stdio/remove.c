@@ -17,19 +17,10 @@
 
 extern struct _PDCLIB_file_t * _PDCLIB_filelist;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern int unlink( const char * pathname );
-
-#ifdef __cplusplus
-}
-#endif
+#include "pdclib/_PDCLIB_glue.h"
 
 int remove( const char * pathname )
 {
-    int rc;
     struct _PDCLIB_file_t * current = _PDCLIB_filelist;
 
     while ( current != NULL )
@@ -42,13 +33,7 @@ int remove( const char * pathname )
         current = current->next;
     }
 
-    if ( ( rc = unlink( pathname ) ) == -1 )
-    {
-        /* The 1:1 mapping in _PDCLIB_config.h ensures this works. */
-        *_PDCLIB_errno_func() = errno;
-    }
-
-    return rc;
+    return  _PDCLIB_remove( pathname );
 }
 
 #endif

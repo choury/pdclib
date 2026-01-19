@@ -32,7 +32,7 @@ option( IGNORE_NO_TESTDRIVER "Ignore NO_TESTDRIVER flags instead of reporting th
 option( AS_CXX "Compile as C++. (For testing purposes.) Default: OFF." OFF )
 option( AS_C11 "Compile as C11. (For testing purposes.) Default: OFF." OFF )
 option( AS_C90 "Compile as C90. (For testing purposes.) Default: OFF." OFF )
-option( USE_THREADS "Compile with support for <threads.h>. Default: ON." ON )
+option( USE_THREADS "Compile with support for <threads.h>. Default: ON." OFF )
 
 # Setting compiler to standard, no extensions.
 if ( AS_C11 )
@@ -50,17 +50,17 @@ if ( NOT USE_THREADS )
     set( __STDC_NO_THREADS__ 1 )
 endif()
 
-configure_file( platform/example/include/pdclib/_PDCLIB_config.h
+configure_file( platform/bpf/include/pdclib/_PDCLIB_config.h
     configured_include/pdclib/_PDCLIB_config.h
 )
 
 find_path( ERRNO_PATH errno.h DOC "Path to the system <errno.h>" )
 find_path( FCNTL_PATH fcntl.h DOC "Path to the system <fcntl.h>" )
 
-configure_file( platform/example/include/pdclib/_PDCLIB_platform_errno.h
+configure_file( platform/bpf/include/pdclib/_PDCLIB_platform_errno.h
     configured_include/pdclib/_PDCLIB_platform_errno.h
 )
-configure_file( platform/example/include/pdclib/_PDCLIB_platform_fcntl.h
+configure_file( platform/bpf/include/pdclib/_PDCLIB_platform_fcntl.h
     configured_include/pdclib/_PDCLIB_platform_fcntl.h
 )
 
@@ -107,19 +107,8 @@ set( PDCLIB_SOURCES
      functions/locale/localeconv.c
      functions/locale/setlocale.c
 
-     functions/math/fabs.c
-     functions/math/fdim.c
-     functions/math/fmax.c
-     functions/math/fmin.c
-     functions/math/fpclassify.c
-     functions/math/isfinite.c
-     functions/math/isinf.c
-     functions/math/isnan.c
-     functions/math/isnormal.c
-     functions/math/signbit.c
-
-     platform/example/functions/signal/raise.c
-     platform/example/functions/signal/signal.c
+     platform/bpf/functions/signal/raise.c
+     platform/bpf/functions/signal/signal.c
 
      functions/stdio/clearerr.c
      functions/stdio/fclose.c
@@ -168,7 +157,7 @@ set( PDCLIB_SOURCES
      functions/stdio/vsnprintf.c
      functions/stdio/vsprintf.c
      functions/stdio/vsscanf.c
-     platform/example/functions/stdio/tmpfile.c
+     platform/bpf/functions/stdio/tmpfile.c
 
      functions/stdlib/abort.c
      functions/stdlib/abort_handler_s.c
@@ -179,8 +168,8 @@ set( PDCLIB_SOURCES
      functions/stdlib/atol.c
      functions/stdlib/atoll.c
      functions/stdlib/bsearch.c
-     functions/stdlib/bsearch_s.c
      functions/stdlib/div.c
+
      functions/stdlib/exit.c
      functions/stdlib/_Exit.c
      functions/stdlib/ignore_handler_s.c
@@ -194,16 +183,13 @@ set( PDCLIB_SOURCES
      functions/stdlib/rand.c
      functions/stdlib/set_constraint_handler_s.c
      functions/stdlib/srand.c
-     functions/stdlib/strtod.c
-     functions/stdlib/strtof.c
-     functions/stdlib/strtold.c
      functions/stdlib/strtol.c
      functions/stdlib/strtoll.c
      functions/stdlib/strtoul.c
      functions/stdlib/strtoull.c
-     platform/example/functions/stdlib/getenv.c
-     platform/example/functions/stdlib/getenv_s.c
-     platform/example/functions/stdlib/system.c
+     platform/bpf/functions/stdlib/getenv.c
+     platform/bpf/functions/stdlib/getenv_s.c
+     platform/bpf/functions/stdlib/system.c
 
      functions/string/memchr.c
      functions/string/memcmp.c
@@ -242,16 +228,15 @@ set( PDCLIB_SOURCES
      functions/time/asctime_s.c
      functions/time/ctime.c
      functions/time/ctime_s.c
-     functions/time/difftime.c
      functions/time/gmtime.c
      functions/time/gmtime_s.c
      functions/time/localtime.c
      functions/time/localtime_s.c
      functions/time/mktime.c
      functions/time/strftime.c
-     platform/example/functions/time/clock.c
-     platform/example/functions/time/time.c
-     platform/example/functions/time/timespec_get.c
+     platform/bpf/functions/time/clock.c
+     platform/bpf/functions/time/time.c
+     platform/bpf/functions/time/timespec_get.c
 
      functions/_dlmalloc/malloc.c
 
@@ -271,8 +256,6 @@ set( PDCLIB_SOURCES
      functions/_PDCLIB/assert.c
      functions/_PDCLIB/errno.c
      functions/_PDCLIB/_PDCLIB_atomax.c
-     functions/_PDCLIB/_PDCLIB_fp_from_dbl.c
-     functions/_PDCLIB/_PDCLIB_fp_from_ldbl.c
      functions/_PDCLIB/_PDCLIB_bigint_add.c
      functions/_PDCLIB/_PDCLIB_bigint_cmp.c
      functions/_PDCLIB/_PDCLIB_bigint_digit_log2.c
@@ -286,6 +269,8 @@ set( PDCLIB_SOURCES
      functions/_PDCLIB/_PDCLIB_bigint_mul10.c
      functions/_PDCLIB/_PDCLIB_bigint_mul_pow10.c
      functions/_PDCLIB/_PDCLIB_bigint_shl.c
+     functions/_PDCLIB/_PDCLIB_fp_from_dbl.c
+     functions/_PDCLIB/_PDCLIB_fp_from_ldbl.c
      functions/_PDCLIB/_PDCLIB_closeall.c
      functions/_PDCLIB/_PDCLIB_digits.c
      functions/_PDCLIB/_PDCLIB_filemode.c
@@ -294,14 +279,11 @@ set( PDCLIB_SOURCES
      functions/_PDCLIB/_PDCLIB_is_leap.c
      functions/_PDCLIB/_PDCLIB_isstream.c
      functions/_PDCLIB/_PDCLIB_load_lc_collate.c
-     functions/_PDCLIB/_PDCLIB_load_lc_ctype.c
      functions/_PDCLIB/_PDCLIB_load_lc_messages.c
      functions/_PDCLIB/_PDCLIB_load_lc_monetary.c
      functions/_PDCLIB/_PDCLIB_load_lc_numeric.c
      functions/_PDCLIB/_PDCLIB_load_lc_time.c
      functions/_PDCLIB/_PDCLIB_load_lines.c
-     functions/_PDCLIB/_PDCLIB_naive_etod.c
-     functions/_PDCLIB/_PDCLIB_naive_ptod.c
      functions/_PDCLIB/_PDCLIB_prepread.c
      functions/_PDCLIB/_PDCLIB_prepwrite.c
      functions/_PDCLIB/_PDCLIB_print.c
@@ -318,17 +300,17 @@ set( PDCLIB_SOURCES
      functions/_PDCLIB/_PDCLIB_strtox_prelim.c
      functions/_PDCLIB/stdarg.c
 
-     platform/example/functions/_PDCLIB/_PDCLIB_changemode.c
-     platform/example/functions/_PDCLIB/_PDCLIB_close.c
-     platform/example/functions/_PDCLIB/_PDCLIB_Exit.c
-     platform/example/functions/_PDCLIB/_PDCLIB_fillbuffer.c
-     platform/example/functions/_PDCLIB/_PDCLIB_flushbuffer.c
-     platform/example/functions/_PDCLIB/_PDCLIB_open.c
-     platform/example/functions/_PDCLIB/_PDCLIB_realpath.c
-     platform/example/functions/_PDCLIB/_PDCLIB_rename.c
-     platform/example/functions/_PDCLIB/_PDCLIB_remove.c
-     platform/example/functions/_PDCLIB/_PDCLIB_seek.c
-     platform/example/functions/_PDCLIB/_PDCLIB_stdinit.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_changemode.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_close.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_Exit.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_fillbuffer.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_flushbuffer.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_open.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_realpath.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_rename.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_remove.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_seek.c
+     platform/bpf/functions/_PDCLIB/_PDCLIB_stdinit.c
 )
 
 if ( USE_THREADS )
@@ -386,8 +368,7 @@ set( PDCLIB_HEADERS
      include/time.h
      include/wctype.h
 
-     platform/example/include/float.h
-     platform/example/include/signal.h
+     platform/bpf/include/signal.h
 )
 
 if ( USE_THREADS )
@@ -402,7 +383,7 @@ set( PDCLIB_PRIVATE_HEADERS
      include/pdclib/_PDCLIB_glue.h
      include/pdclib/_PDCLIB_internal.h
      include/pdclib/_PDCLIB_lib_ext1.h
-     platform/example/include/pdclib/_PDCLIB_config.h
+     ${CMAKE_BINARY_DIR}/configured_include/pdclib/_PDCLIB_config.h
 )
 
 # These do not get installed on your system at all, they are for building
@@ -432,15 +413,15 @@ if ( USE_THREADS )
 endif()
 
 # Compilation shall use PDCLib's over system include directories.
-target_include_directories( pdclib  BEFORE PRIVATE ${CMAKE_BINARY_DIR}/configured_include include platform/example/include )
-target_include_directories( pdclibs BEFORE PRIVATE ${CMAKE_BINARY_DIR}/configured_include include platform/example/include )
+target_include_directories( pdclib  BEFORE PRIVATE ${CMAKE_BINARY_DIR}/configured_include include platform/bpf/include )
+target_include_directories( pdclibs BEFORE PRIVATE ${CMAKE_BINARY_DIR}/configured_include include platform/bpf/include )
 
 # The code for the DLL / shared object should be compiled with whatever
 # options are appropriate for your compiler to generate relocatable code.
 set_property( TARGET pdclib PROPERTY POSITION_INDEPENDENT_CODE 1 )
 
 # List of strict warnings; the compiler is your friend.
-if ( CMAKE_COMPILER_IS_GNUCC )
+if ( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
     # The bit about -D_STDC_PREDEF_H is a heavy-handed way to interdict
     # GCC making statements about the standard library's capabilities,
     # specifically __STDC_NO_THREADS__ (by including stdc-predef.h). I
@@ -497,20 +478,20 @@ foreach( file ${PDCLIB_SOURCES} )
     add_executable( ${basename}_t ${file} )
     set_property( TARGET ${basename}_t APPEND_STRING PROPERTY COMPILE_FLAGS "-DTEST -D_PDCLIB_BUILD ${FLAGS}" )
     set_property( TARGET ${basename}_t PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test_support/testdrivers )
-    target_include_directories( ${basename}_t BEFORE PRIVATE ${CMAKE_BINARY_DIR}/configured_include include platform/example/include test_support )
+    target_include_directories( ${basename}_t BEFORE PRIVATE ${CMAKE_BINARY_DIR}/configured_include include platform/bpf/include test_support )
     target_link_libraries( ${basename}_t pdclibs )
     add_test( ${basename}_t test_support/testdrivers/${basename}_t )
     add_dependencies( testdrivers ${basename}_t )
 
     # Regression test driver, _r suffix, compiled with -DTEST -DREGTEST
     # against system libc.
-    add_executable( ${basename}_r ${file} )
-    set_property( TARGET ${basename}_r APPEND_STRING PROPERTY COMPILE_FLAGS "-DTEST -DREGTEST ${FLAGS}" )
-    set_property( TARGET ${basename}_r PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test_support/regtestdrivers )
-    target_include_directories( ${basename}_r BEFORE PRIVATE test_support )
-    target_link_libraries( ${basename}_r ${LIBM} )
-    add_test( ${basename}_r test_support/regtestdrivers/${basename}_r )
-    add_dependencies( regtestdrivers ${basename}_r )
+    #add_executable( ${basename}_r ${file} )
+    #set_property( TARGET ${basename}_r APPEND_STRING PROPERTY COMPILE_FLAGS "-DTEST -DREGTEST ${FLAGS}" )
+    #set_property( TARGET ${basename}_r PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test_support/regtestdrivers )
+    #target_include_directories( ${basename}_r BEFORE PRIVATE test_support )
+    #target_link_libraries( ${basename}_r ${LIBM} )
+    #add_test( ${basename}_r test_support/regtestdrivers/${basename}_r )
+    #add_dependencies( regtestdrivers ${basename}_r )
 endforeach()
 
 # Installation files
@@ -553,6 +534,7 @@ include( CPack )
 # (Platform maintainers are supposed to use the output to adapt their
 # platform's platform/<xyz>/functions/_PDCLIB/_PDCLIB_stdinit.c and
 # platform/<xyz>/include/pdclib/_PDCLIB_config.h.)
+if (0)
 add_subdirectory( auxiliary/errno )
 
 # A helper executable to parse up-to-date Unicode metadata from the
@@ -572,6 +554,7 @@ endif()
 # and displaying their encoding. Nothing more than a "I understood those
 # encodings correctly" confidence check.
 add_subdirectory( auxiliary/fpconvert )
+endif()
 
 # Creating symlinks to source in binary dir for convenience
 if ( CMAKE_HOST_UNIX )
