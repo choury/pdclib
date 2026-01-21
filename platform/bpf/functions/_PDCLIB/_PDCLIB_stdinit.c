@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <locale.h>
 #include <limits.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 #ifndef REGTEST
 
@@ -580,6 +582,65 @@ struct state _PDCLIB_gmtmem;
    Thanks to Paul Eggert for noting this.
 */
 struct tm _PDCLIB_tm;
+
+char ** environ;
+extern int main() __attribute__((weak));
+typedef int (*standard_main_t)( int, char ** );
+
+static char ** _PDCLIB_copy_environ( char ** envp )
+{
+    size_t count = 0;
+    char ** copy;
+
+    if ( envp == NULL )
+    {
+        return NULL;
+    }
+
+    while ( envp[ count ] != NULL )
+    {
+        count++;
+    }
+
+    copy = malloc( ( count + 1 ) * sizeof( char * ) );
+    if ( copy == NULL )
+    {
+        return NULL;
+    }
+
+    for ( size_t i = 0; i < count; i++ )
+    {
+        copy[ i ] = envp[ i ];
+    }
+    copy[ count ] = NULL;
+    return copy;
+}
+
+void _start( void * stack )
+{
+    int argc = 0;
+    char ** argv = NULL;
+    char ** envp = NULL;
+
+    if( stack != NULL )
+    {
+        uintptr_t base = (uintptr_t)stack;
+        uint64_t argc_raw = *(uint64_t *)base;
+        size_t argc_size = (size_t)argc_raw;
+        size_t argv_bytes = ( argc_size + 1 ) * sizeof( uint64_t );
+
+        argc = (int)argc_raw;
+        argv = (char **)( base + sizeof( uint64_t ) );
+        envp = (char **)( base + sizeof( uint64_t ) + argv_bytes );
+    }
+
+    environ = _PDCLIB_copy_environ( envp );
+    if ( environ == NULL )
+    {
+        environ = envp;
+    }
+    exit( ((standard_main_t)main)( argc, argv ) );
+}
 
 #endif
 

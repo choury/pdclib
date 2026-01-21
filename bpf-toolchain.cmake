@@ -33,10 +33,11 @@ set(CMAKE_C_FLAGS "-target bpf \
                    ${_bpf_wideargs_flag} \
                    ${_bpf_softfp_flag} \
                    -I${BPFVM_TOP_INCLUDE}/include" CACHE STRING "C compiler flags for BPF" FORCE)
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,-e,main" CACHE STRING "Linker flags for BPF executables")
 
 set(CMAKE_C_COMPILE_OBJECT "<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT> -c <SOURCE> && bpf-objcopy --set-section-flags .rodata.str1.1=alloc,readonly,data <OBJECT>")
 set(AS_C11 "ON")
+
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,-e,_start" CACHE STRING "Linker flags for BPF executables")
 
 #set(CMAKE_LINKER /usr/bin/bpf-ld)
 #set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
