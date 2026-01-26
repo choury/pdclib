@@ -15,15 +15,7 @@
 
 int _PDCLIB_remove( const char * pathname )
 {
-    int rc = unlink( pathname );
-
-    if ( rc < 0 )
-    {
-        *_PDCLIB_errno_func() = -rc;
-        return -1;
-    }
-
-    return 0;
+    return unlink( pathname );
 }
 
 #endif

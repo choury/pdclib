@@ -696,6 +696,11 @@ _PDCLIB_PUBLIC int puts( const char * s );
 */
 _PDCLIB_PUBLIC int ungetc( int c, FILE * stream );
 
+/* POSIX 2008 additions */
+_PDCLIB_PUBLIC _PDCLIB_ssize_t getdelim(char ** _PDCLIB_restrict lineptr, size_t * _PDCLIB_restrict n, int delimiter, FILE * _PDCLIB_restrict stream);
+_PDCLIB_PUBLIC _PDCLIB_ssize_t getline(char ** _PDCLIB_restrict lineptr, size_t * _PDCLIB_restrict n, FILE * _PDCLIB_restrict stream);
+_PDCLIB_PUBLIC int fileno( FILE * stream );
+
 /* Direct input/output functions */
 
 /* Read up to nmemb elements of given size from given stream into the buffer

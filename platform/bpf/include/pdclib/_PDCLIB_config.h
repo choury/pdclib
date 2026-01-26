@@ -306,6 +306,8 @@ struct _PDCLIB_lldiv_t
 #define _PDCLIB_size_t   __SIZE_TYPE__
 #define _PDCLIB_SIZE_MAX __SIZE_MAX__
 
+typedef long _PDCLIB_ssize_t;
+
 /* Large enough an integer to hold all character codes of the widest          */
 /* supported locale.                                                          */
 #define _PDCLIB_wchar_t   __WCHAR_TYPE__
@@ -560,6 +562,71 @@ typedef __builtin_va_list _PDCLIB_va_list;
     ___bpf_nth(_, ##__VA_ARGS__, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 #endif
 
+
+#ifndef __BPF_SYSCALL
+#define __BPF_SYSCALL
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#pragma GCC diagnostic ignored "-Wint-conversion"
+
+static inline long __bpf_syscall0(unsigned long call)
+{
+    return ((long (*)(void))call)();
+}
+
+static inline long __bpf_syscall1(unsigned long call, long arg1)
+{
+    return ((long (*)(long))call)(arg1);
+}
+
+static inline long __bpf_syscall2(unsigned long call, long arg1, long arg2)
+{
+    return ((long (*)(long, long))call)(arg1, arg2);
+}
+
+static inline long __bpf_syscall3(unsigned long call, long arg1, long arg2, long arg3)
+{
+    return ((long (*)(long, long, long))call)(arg1, arg2, arg3);
+}
+
+static inline long __bpf_syscall4(unsigned long call, long arg1, long arg2, long arg3, long arg4)
+{
+    return ((long (*)(long, long, long, long))call)(arg1, arg2, arg3, arg4);
+}
+
+static inline long __bpf_syscall5(unsigned long call, long arg1, long arg2, long arg3, long arg4, long arg5)
+{
+    return ((long (*)(long, long, long, long, long))call)(arg1, arg2, arg3, arg4, arg5);
+}
+
+static inline long __bpf_syscall6(unsigned long call, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
+{
+    return ((long (*)(long, long, long, long, long, long))call)(arg1, arg2, arg3, arg4, arg5, arg6);
+}
+
+#pragma GCC diagnostic pop
+
+#define __bpf_syscall(call, args...) \
+    ___bpf_apply(__bpf_syscall, ___bpf_narg(args))(call, ##args)
+#define ___bpf_pick_syscall(_, ...) \
+    ___bpf_nth(_, ##__VA_ARGS__, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall, \
+        __bpf_syscall0)
+#define syscall(call, args...)  ___bpf_pick_syscall(_, ##args)(call, ##args)
+
+#endif
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"

@@ -13,6 +13,8 @@ extern "C" {
 
 #include "pdclib/_PDCLIB_internal.h"
 
+#include_next <limits.h>
+
 /* TODO: Defined to 1 as multibyte characters are not supported yet. */
 #define MB_LEN_MAX 1
 

@@ -5,6 +5,8 @@
 */
 
 #include <time.h>
+#include <errno.h>
+#include <unistd.h>
 
 #ifndef REGTEST
 
@@ -29,6 +31,32 @@ time_t time( time_t * timer )
     }
 
     return -1;
+}
+
+unsigned int sleep( unsigned int seconds )
+{
+    struct timespec req;
+    struct timespec rem;
+
+    req.tv_sec = (time_t)seconds;
+    req.tv_nsec = 0;
+
+    if ( nanosleep( &req, &rem ) == 0 )
+    {
+        return 0;
+    }
+
+    if ( errno == EINTR )
+    {
+        unsigned int left = (unsigned int)rem.tv_sec;
+        if ( rem.tv_nsec > 0 )
+        {
+            left += 1;
+        }
+        return left;
+    }
+
+    return seconds;
 }
 
 #endif

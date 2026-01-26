@@ -36,6 +36,7 @@
 
 #include <limits.h>
 #include <stddef.h>
+#include <sys/stat.h>
 
 int _PDCLIB_changemode( struct _PDCLIB_file_t * stream, unsigned int mode )
 {
@@ -54,7 +55,7 @@ int _PDCLIB_changemode( struct _PDCLIB_file_t * stream, unsigned int mode )
     else
     {
         /* Stream with file associated, attempt reopen */
-        return 0;
+        return fchmod( stream->handle, mode );
     }
 }
 

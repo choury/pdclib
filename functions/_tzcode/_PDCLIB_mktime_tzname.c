@@ -20,6 +20,21 @@
 #define WRONG   (-1)
 #endif
 
+#define SMALLEST( a, b )  (((a) < (b)) ? (a) : (b))
+
+static bool increment_overflow_time( time_t * tp, int_fast32_t j )
+{
+    time_t const t = *tp;
+
+    if ( ( t >= 0 ) ? ( j > _PDCLIB_TIME_MAX - t ) : ( j < _PDCLIB_TIME_MIN - t ) )
+    {
+        return true;
+    }
+
+    *tp += j;
+    return false;
+}
+
 /* Normalize logic courtesy Paul Eggert. */
 
 static bool increment_overflow32( int_fast32_t * lp, int m )

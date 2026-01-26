@@ -42,18 +42,7 @@ int _PDCLIB_rename( const char * oldpath, const char * newpath )
     /* Whether existing newpath is overwritten is implementation-
        defined. This system call *does* overwrite.
     */
-    int rc = renameat( AT_FDCWD, oldpath, AT_FDCWD, newpath );
-
-    if ( rc < 0 )
-    {
-        /* The 1:1 mapping in _PDCLIB_config.h ensures this works. */
-        *_PDCLIB_errno_func() = -rc;
-        return -1;
-    }
-    else
-    {
-        return 0;
-    }
+    return renameat( AT_FDCWD, oldpath, AT_FDCWD, newpath );
 }
 
 #endif

@@ -4,6 +4,7 @@
    Permission is granted to use, modify, and / or redistribute at will.
 */
 
+#include <errno.h>
 #include <time.h>
 
 #ifndef REGTEST
@@ -19,6 +20,14 @@ clock_t clock( void )
         return buf.tms_utime + buf.tms_stime;
     }
 
+    return -1;
+}
+
+int clock_settime( clockid_t clock_id, const struct timespec * tp )
+{
+    (void)clock_id;
+    (void)tp;
+    errno = EPERM;
     return -1;
 }
 

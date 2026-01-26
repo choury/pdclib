@@ -8,6 +8,8 @@
 #define _PDCLIB_SIGNAL_H _PDCLIB_SIGNAL_H
 
 #include "pdclib/_PDCLIB_internal.h"
+#include <stdint.h>
+#include_next <signal.h>
 
 /* Signals ------------------------------------------------------------------ */
 
@@ -28,31 +30,6 @@
    3) make provisions that further signals of the same type are blocked until
       the signal handler returns (optional for SIGILL)
 */
-
-/* These are the values used by Linux. */
-
-/* Abnormal termination / abort() */
-#define SIGABRT 6
-/* Arithmetic exception / division by zero / overflow */
-#define SIGFPE  8
-/* Illegal instruction */
-#define SIGILL  4
-/* Interactive attention signal */
-#define SIGINT  2
-/* Invalid memory access */
-#define SIGSEGV 11
-/* Termination request */
-#define SIGTERM 15
-
-/* The following should be defined to pointer values that could NEVER point to
-   a valid signal handler function. (They are used as special arguments to
-   signal().) Again, these are the values used by Linux.
-*/
-#define SIG_DFL (void (*)( int ))0
-#define SIG_ERR (void (*)( int ))-1
-#define SIG_IGN (void (*)( int ))1
-
-typedef _PDCLIB_sig_atomic_t sig_atomic_t;
 
 /* Installs a signal handler "func" for the given signal.
    A signal handler is a function that takes an integer as argument (the signal

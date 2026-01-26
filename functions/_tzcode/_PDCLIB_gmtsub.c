@@ -20,7 +20,7 @@ struct tm * _PDCLIB_gmtsub( struct state const * sp, time_t const * timep, int_f
        "+xx" or "-xx" if offset is non-zero,
        but this is no time for a treasure hunt.
     */
-    tmp->TM_ZONE = ( (char *)( offset ? wildabbr : &_PDCLIB_gmtmem ? _PDCLIB_gmtptr.chars : gmt ) );
+    tmp->TM_ZONE = (char *) gmt;
 #endif
 
     return result;

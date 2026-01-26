@@ -8,27 +8,19 @@
 
 #include "pdclib/_PDCLIB_glue.h"
 
-#include <stddef.h>
 #include <stdlib.h>
-#include <fcntl.h>
-#include <string.h>
-#include <unistd.h>
+#include <limits.h>
 
 char * _PDCLIB_realpath( const char * path )
 {
-    char* repath = malloc( PATH_MAX );
-    ssize_t len = readlink( path, repath, PATH_MAX - 1 );
-
-    if ( len < 0 )
+    char * buffer = malloc( PATH_MAX );
+    if ( buffer == NULL ) return NULL;
+    if ( realpath( path, buffer ) == NULL )
     {
-        /* Not a symlink or other error. Return the path as-is. */
-        strncpy( repath, path, PATH_MAX );
-        repath[ PATH_MAX - 1 ] = '\0';
-        return repath;
+        free( buffer );
+        return NULL;
     }
-
-    repath[ len ] = '\0';
-    return repath;
+    return buffer;
 }
 
 #endif

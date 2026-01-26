@@ -49,6 +49,11 @@ int fflush( struct _PDCLIB_file_t * stream )
     else
     {
         _PDCLIB_LOCK( stream->mtx );
+        if ( !( stream->status & ( _PDCLIB_FWRITE | _PDCLIB_FRW ) ) )
+        {
+            _PDCLIB_UNLOCK( stream->mtx );
+            return 0;
+        }
         rc = _PDCLIB_flushbuffer( stream );
         _PDCLIB_UNLOCK( stream->mtx );
     }

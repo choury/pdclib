@@ -109,6 +109,25 @@ set( PDCLIB_SOURCES
 
      platform/bpf/functions/signal/raise.c
      platform/bpf/functions/signal/signal.c
+     platform/bpf/functions/posix/getopt.c
+     platform/bpf/functions/posix/libgen.c
+     platform/bpf/functions/posix/env.c
+     platform/bpf/functions/posix/syscall.c
+     platform/bpf/functions/posix/dirent.c
+     platform/bpf/functions/posix/exec.c
+     platform/bpf/functions/posix/sysconf.c
+     platform/bpf/functions/posix/termios.c
+     platform/bpf/functions/posix/strings.c
+     platform/bpf/functions/posix/wchar.c
+     platform/bpf/functions/posix/inet.c
+     platform/bpf/functions/posix/setjmp.c
+     platform/bpf/functions/posix/getline.c
+     platform/bpf/functions/posix/fileno.c
+     platform/bpf/functions/posix/fnmatch.c
+     platform/bpf/functions/posix/getgrgid.c
+     platform/bpf/functions/posix/getpwuid.c
+     platform/bpf/functions/posix/realpath.c
+     platform/bpf/functions/posix/mkstemp.c
 
      functions/stdio/clearerr.c
      functions/stdio/fclose.c
@@ -233,6 +252,7 @@ set( PDCLIB_SOURCES
      functions/time/localtime.c
      functions/time/localtime_s.c
      functions/time/mktime.c
+     functions/time/strptime.c
      functions/time/strftime.c
      platform/bpf/functions/time/clock.c
      platform/bpf/functions/time/time.c
@@ -369,6 +389,20 @@ set( PDCLIB_HEADERS
      include/wctype.h
 
      platform/bpf/include/signal.h
+     platform/bpf/include/wchar.h
+     platform/bpf/include/fnmatch.h
+     platform/bpf/include/getopt.h
+     platform/bpf/include/libgen.h
+     platform/bpf/include/setjmp.h
+     platform/bpf/include/strings.h
+     platform/bpf/include/termios.h
+     platform/bpf/include/grp.h
+     platform/bpf/include/pwd.h
+     platform/bpf/include/dirent.h
+)
+
+set( PDCLIB_ARPA_HEADERS
+     platform/bpf/include/arpa/inet.h
 )
 
 if ( USE_THREADS )
@@ -503,6 +537,7 @@ else()
 endif()
 
 install( FILES ${PDCLIB_HEADERS} DESTINATION include )
+install( FILES ${PDCLIB_ARPA_HEADERS} DESTINATION include/arpa )
 install( FILES ${PDCLIB_PRIVATE_HEADERS} DESTINATION include/pdclib )
 
 # CPack config

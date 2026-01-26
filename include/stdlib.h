@@ -190,6 +190,24 @@ _PDCLIB_PUBLIC _PDCLIB_Noreturn void _Exit( int status ) _PDCLIB_NORETURN;
 */
 _PDCLIB_PUBLIC char * getenv( const char * name );
 
+/* POSIX: set an environment variable. */
+_PDCLIB_PUBLIC int setenv( const char * name, const char * value, int overwrite );
+
+/* POSIX: unset an environment variable. */
+_PDCLIB_PUBLIC int unsetenv( const char * name );
+
+/* POSIX: put string into the environment. */
+_PDCLIB_PUBLIC int putenv( char * string );
+
+/* POSIX: resolve a pathname to an absolute canonical path. */
+_PDCLIB_PUBLIC char * realpath( const char * _PDCLIB_restrict path, char * _PDCLIB_restrict resolved_name );
+
+/* POSIX: create a unique temporary file from a template. */
+_PDCLIB_PUBLIC int mkstemp( char * template );
+
+/* POSIX: create a unique temporary directory from a template. */
+_PDCLIB_PUBLIC char * mkdtemp( char * template );
+
 /* If string is a NULL pointer, system() returns nonzero if a command processor
    is available, and zero otherwise. If string is not a NULL pointer, it is
    passed to the command processor. If system() returns, it does so with a

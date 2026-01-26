@@ -380,6 +380,9 @@ _PDCLIB_PUBLIC size_t strnlen_s( const char * s, size_t maxsize );
 
 #endif
 
+
+#include <strings.h>
+
 #ifdef __cplusplus
 }
 #endif

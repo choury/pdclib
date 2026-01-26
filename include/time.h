@@ -24,6 +24,22 @@ typedef _PDCLIB_size_t size_t;
 #define NULL _PDCLIB_NULL
 #endif
 
+/* POSIX clock identifier type. */
+#ifndef _PDCLIB_CLOCKID_T_DEFINED
+#define _PDCLIB_CLOCKID_T_DEFINED _PDCLIB_CLOCKID_T_DEFINED
+typedef int clockid_t;
+#endif
+
+#ifndef CLOCK_REALTIME
+#define CLOCK_REALTIME 0
+#endif
+#ifndef CLOCK_MONOTONIC
+#define CLOCK_MONOTONIC 1
+#endif
+#ifndef CLOCK_PROCESS_CPUTIME_ID
+#define CLOCK_PROCESS_CPUTIME_ID 2
+#endif
+
 /* See comments in _PDCLIB_config.h on the semantics of time_t and clock_t. */
 
 typedef _PDCLIB_time_t time_t;
@@ -58,7 +74,12 @@ struct tm
     int tm_wday;  /* 0-6 */
     int tm_yday;  /* 0-365 */
     int tm_isdst; /* >0 DST, 0 no DST, <0 information unavailable */
+    long tm_gmtoff; /* offset from UTC in seconds */
+    const char * tm_zone; /* timezone abbreviation */
 };
+
+#define TM_GMTOFF tm_gmtoff
+#define TM_ZONE tm_zone
 
 /* Returns the number of "clocks" in processor time since the invocation
    of the program. Divide by CLOCKS_PER_SEC to get the value in seconds.
@@ -85,6 +106,15 @@ _PDCLIB_PUBLIC time_t time( time_t * timer );
    Returns base, if successful, otherwise zero.
 */
 _PDCLIB_PUBLIC int timespec_get( struct timespec * ts, int base );
+
+/* POSIX: sleep for specified interval. */
+_PDCLIB_PUBLIC int nanosleep( const struct timespec * req, struct timespec * rem );
+
+/* POSIX: get the specified clock. */
+_PDCLIB_PUBLIC int clock_gettime( clockid_t clock_id, struct timespec * tp );
+
+/* POSIX: set the specified clock. */
+_PDCLIB_PUBLIC int clock_settime( clockid_t clock_id, const struct timespec * tp );
 
 /* Converts the broken-down time pointed to by timeptr into a string in the
    form "Sun Sep 16 01:03:52 1973\n\0".
@@ -115,6 +145,13 @@ _PDCLIB_PUBLIC struct tm * localtime( const time_t * timer );
    null character), or zero on failure.
 */
 _PDCLIB_PUBLIC size_t strftime( char * _PDCLIB_restrict s, size_t maxsize, const char * _PDCLIB_restrict format, const struct tm * _PDCLIB_restrict timeptr );
+
+/* Parse the string s according to the format string format and store the
+   results in the structure pointed to by tm.
+   Returns a pointer to the character following the last character parsed,
+   or a NULL pointer if the conversion failed.
+*/
+_PDCLIB_PUBLIC char * strptime( const char * _PDCLIB_restrict s, const char * _PDCLIB_restrict format, struct tm * _PDCLIB_restrict tm );
 
 /* Annex K -- Bounds-checking interfaces */
 

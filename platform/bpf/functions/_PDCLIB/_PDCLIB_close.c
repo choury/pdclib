@@ -18,15 +18,7 @@
 
 int _PDCLIB_close( int fd )
 {
-    int rc = close( fd );
-
-    if ( rc < 0 )
-    {
-        *_PDCLIB_errno_func() = -rc;
-        return -1;
-    }
-
-    return 0;
+    return close( fd );
 }
 
 #endif

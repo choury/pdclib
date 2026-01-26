@@ -24,7 +24,6 @@ _PDCLIB_fd_t _PDCLIB_open( const char * const filename, unsigned int mode )
        POSIX kernels.
     */
     int osmode;
-    _PDCLIB_fd_t rc;
 
     switch ( mode & ( _PDCLIB_FREAD | _PDCLIB_FWRITE | _PDCLIB_FAPPEND | _PDCLIB_FRW ) )
     {
@@ -58,21 +57,12 @@ _PDCLIB_fd_t _PDCLIB_open( const char * const filename, unsigned int mode )
 
     if ( osmode & O_CREAT )
     {
-        rc = open( filename, osmode, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH );
+        return open( filename, osmode, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH );
     }
     else
     {
-        rc = open( filename, osmode );
+        return open( filename, osmode );
     }
-
-    if ( rc < 0 )
-    {
-        /* The 1:1 mapping in _PDCLIB_config.h ensures this works. */
-        *_PDCLIB_errno_func() = -rc;
-        return _PDCLIB_NOHANDLE;
-    }
-
-    return rc;
 }
 
 #endif
