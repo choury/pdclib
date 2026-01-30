@@ -16,6 +16,11 @@
 #include <stdint.h>
 void * sbrk( intptr_t );
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
+#endif
+
 #ifndef REGTEST
 
 #include "pdclib/_PDCLIB_config.h"
@@ -4080,6 +4085,7 @@ static void add_segment(mstate m, char* tbase, size_t tsize, flag_t mmapped) {
       break;
   }
   assert(nfences >= 2);
+  (void)nfences;
 
   /* Insert the rest of old top into a bin as an ordinary free chunk */
   if (csp != old_top) {
@@ -6127,6 +6133,10 @@ int mspace_mallopt(int param_number, int value) {
   }
 
 */
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 
 /* -----------------------------------------------------------------------
